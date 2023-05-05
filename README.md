@@ -4,7 +4,8 @@
 
 ![hand](https://user-images.githubusercontent.com/2639360/115254296-1ac65700-a125-11eb-9e10-f8b175a55cd5.gif)
 
-## A portable random orchestra
+# A project forked from https://github.com/oio/bouncing-band with Variant Launch WebXR support on iOS
+
 
 Bouncing Band turns any space into a musical instrument. Just use objects and characters from the random orchestra to create music and beats, or just fill the room with chaotic noise.
 
