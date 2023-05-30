@@ -1,0 +1,83 @@
+<html>
+  <head>
+    <title>Bouncing Band</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no"
+    />
+
+    <link rel="stylesheet" href="/style.9c3b912e.css" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Gaegu:wght@700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://staging.launchar.app/sdk/v1?key=kvqZDtMYedJyimxBoGlzsfnWfwJhIFWp&redirect=false"></script>
+    <script>
+      window.addEventListener("vlaunch-initialized", function (event) {
+        var launch = document.querySelector(".launch");
+        var header = document.querySelector(".header");
+        var button = document.querySelector(".button");
+        console.log("launch initialized");
+
+        //do nothing if not iOS
+        if (VLaunch.platform !== "ios") {
+          return;
+        }
+        let browserType = VLaunch.appleBrowser;
+
+        let url = VLaunch.getLaunchUrl();
+        let instructions = VLaunch.getLaunchInstructions();
+
+        header.innerHTML = instructions;
+        button.style.display = "block";
+        console.log(url, instructions, browserType);
+      });
+    </script>
+
+    <style>
+      #splash {
+        top: 30vh;
+      }
+      #splash h2 {
+        font-size: 3rem;
+      }
+
+      body {
+        margin: 0;
+        background: #000;
+      }
+      #splash {
+        position: fixed;
+        width: 100%;
+        color: #fff;
+        font-family: "Gaegu", sans-serif;
+        text-align: center;
+      }
+
+      .button {
+        display: none;
+        border-radius: 0.5rem;
+        border: 2px white solid;
+        font-family: "Gaegu";
+        color: white;
+        text-align: center;
+        font-size: 1.5rem;
+        padding: 0.5rem;
+        margin: auto;
+        width: fit-content;
+        margin-top: 2rem;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="splash">
+      <div class="launch">
+        <h2 class="header">Tap 'Open' on the banner to Launch</h2>
+        <div class="button">Tap & Hold</div>
+      </div>
+    </div>
+  </body>
+</html>

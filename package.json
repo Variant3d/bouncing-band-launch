@@ -2,6 +2,7 @@
   "name": "whale",
   "author": "matlo <write@matlo.me>",
   "license": "GPL-3.0",
+  "homepage": "/",
   "dependencies": {
     "babel-core": "^6.26.3",
     "babel-loader": "^8.2.2",
@@ -14,9 +15,9 @@
     "three": "^0.125.2"
   },
   "scripts": {
-    "start": "parcel src/index.pug",
+    "start": "parcel src/index.pug --port 3030 & cloudflared tunnel run --url http://localhost:3030",
     "build": "parcel build src/index.pug --no-source-maps -d public",
-    "grok": "ngrok http 1234 -bind-tls=true"
+    "grok": "ngrok http 3030 -bind-tls=true"
   },
   "devDependencies": {
     "babel-preset-env": "^1.7.0",
