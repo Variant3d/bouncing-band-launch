@@ -1,6 +1,6 @@
 window.addEventListener("vlaunch-initialized", function (event) {
-  console.log("vlaunch-initialized", event);
-  if (!event.launchRequired) {
+  console.log("vlaunch-initialized", event.detail);
+  if (!event.detail.launchRequired) {
     // we are either in Launch Viewer, or not on iOS
     return;
   }
