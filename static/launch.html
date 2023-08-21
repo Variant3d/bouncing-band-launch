@@ -13,26 +13,33 @@
       href="https://fonts.googleapis.com/css2?family=Gaegu:wght@700&display=swap"
       rel="stylesheet"
     />
-    <script src="https://staging.launchar.app/sdk/v1?key=kvqZDtMYedJyimxBoGlzsfnWfwJhIFWp&redirect=false"></script>
+    <script src="https://launchar.app/sdk/v1?key=PgCkcRz0dyNiU3cWrOBw3PIB7cFYnuu8&redirect=false"></script>
     <script>
       window.addEventListener("vlaunch-initialized", function (event) {
         var launch = document.querySelector(".launch");
         var header = document.querySelector(".header");
         var button = document.querySelector(".button");
-        console.log("launch initialized");
+        var anchor = document.querySelector("#targetUrl");
 
-        //do nothing if not iOS
-        if (VLaunch.platform !== "ios") {
+        if (!event.launchRequired) {
+          // we are in Launch Viewer, or not on iOS
+          window.location.href = "/";
           return;
         }
         let browserType = VLaunch.appleBrowser;
 
-        let url = VLaunch.getLaunchUrl();
-        let instructions = VLaunch.getLaunchInstructions();
+        if (browserType == "safari") {
+          // we are in Safari so the launch Card will appear
+          header.innerHTML = "Tap 'Open' on the banner to Launch";
+          return;
+        }
 
-        header.innerHTML = instructions;
+        let targetUrl = VLaunch.getLaunchUrl(
+          new URL("/", document.baseURI).href
+        );
+        header.innerHTML = event.launchInstructions;
         button.style.display = "block";
-        console.log(url, instructions, browserType);
+        anchor.href = targetUrl;
       });
     </script>
 
@@ -76,7 +83,9 @@
     <div id="splash">
       <div class="launch">
         <h2 class="header">Tap 'Open' on the banner to Launch</h2>
-        <div class="button">Tap & Hold</div>
+        <a href="#" id="targetUrl">
+          <div class="button">Tap & Hold</div>
+        </a>
       </div>
     </div>
   </body>

@@ -30,10 +30,8 @@ head
   meta(name="twitter:image" content="https://bouncing.band/og1.png")
   meta(name="twitter:creator" content="@oiostudio")
 
-  //- analytics
-  script(defer data-domain="bouncing.band" src="https://plausible.io/js/plausible.js") 
-  script( src="https://launchar.app/sdk/v1?key=PgCkcRz0dyNiU3cWrOBw3PIB7cFYnuu8&redirect=true") 
-  
+  script( src="https://launchar.app/sdk/v1?key=PgCkcRz0dyNiU3cWrOBw3PIB7cFYnuu8&redirect=false") 
+  script(src="./launch.js")
     
 body
     //- splash
@@ -80,4 +78,5 @@ body
         button.but.next
           img(src="./media/2d/UI/arrow.png", alt="arrow")
 
+    
     script(src="./bounce.js")
