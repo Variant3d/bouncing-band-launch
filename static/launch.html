@@ -16,12 +16,13 @@
     <script src="https://staging.launchar.app/sdk/v1?key=pIPmEGnCGNx8dO6QSm0IFy0T9OFGqrAn&redirect=false"></script>
     <script>
       window.addEventListener("vlaunch-initialized", function (event) {
+        var data = event.detail;
         var launch = document.querySelector(".launch");
         var header = document.querySelector(".header");
         var button = document.querySelector(".button");
         var anchor = document.querySelector("#targetUrl");
 
-        if (!event.launchRequired) {
+        if (!data.launchRequired) {
           // we are in Launch Viewer, or not on iOS
           window.location.href = "/";
           return;
@@ -37,7 +38,7 @@
         let targetUrl = VLaunch.getLaunchUrl(
           new URL("/", document.baseURI).href
         );
-        header.innerHTML = event.launchInstructions;
+        header.innerHTML = data.launchInstructions;
         button.style.display = "block";
         anchor.href = targetUrl;
       });
