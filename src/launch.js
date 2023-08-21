@@ -1,4 +1,5 @@
 window.addEventListener("vlaunch-initialized", function (event) {
+  console.log("vlaunch-initialized", event);
   if (!event.launchRequired) {
     // we are either in Launch Viewer, or not on iOS
     return;
@@ -7,4 +8,5 @@ window.addEventListener("vlaunch-initialized", function (event) {
 
   let targetUrl = new URL("/", document.baseURI).href;
   let launchPage = new URL("/launch.html", document.baseURI).href;
+  VLaunch.launch(targetUrl, launchPage);
 });
