@@ -1,6 +1,6 @@
 {
-  "name": "whale",
-  "author": "matlo <write@matlo.me>",
+  "name": "sami",
+  "author": "sicko <hitmeup@sickostro.com>",
   "license": "GPL-3.0",
   "dependencies": {
     "babel-core": "^6.26.3",
@@ -16,7 +16,8 @@
   "scripts": {
     "start": "parcel src/index.pug",
     "build": "parcel build src/index.pug --no-source-maps -d public",
-    "grok": "ngrok http 1234 -bind-tls=true"
+    "grok": "ngrok http 1234 -bind-tls=true",
+    "dev": "npm run start"
   },
   "devDependencies": {
     "babel-preset-env": "^1.7.0",
