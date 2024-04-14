@@ -15,6 +15,7 @@ export const preload = async () => {
   models.moka = await loadMesh(glbs.moka);
   models.broccoli = await loadMesh(glbs.broccoli);
   models.laser = await loadMesh(glbs.laser);
+  models.faith = await loadMesh(glbs.faith);
 };
 
 export let loadMesh = async (url) => {
@@ -101,6 +102,15 @@ export const spawn = (thing) => {
     let laser = models.laser.clone();
     laser.rotation.set(0, Math.random() * 10, 0);
     obj.mesh = laser;
+    obj.sound = sounds.laser;
+    obj.mass = 3;
+    obj.rDamp = 0.01 + Math.random() * 0.03;
+  }
+
+  if (thing === "faith") {
+    let faith = models.faith.clone();
+    faith.rotation.set(0, Math.random() * 10, 0);
+    obj.mesh = faith;
     obj.sound = sounds.laser;
     obj.mass = 3;
     obj.rDamp = 0.01 + Math.random() * 0.03;
