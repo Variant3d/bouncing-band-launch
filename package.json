@@ -15,7 +15,7 @@
   },
   "scripts": {
     "start": "parcel src/index.pug",
-    "build": "parcel build src/index.pug --no-source-maps -d public",
+    "build": "parcel build src/index.pug --no-source-maps -d dist",
     "grok": "ngrok http 1234 -bind-tls=true",
     "dev": "npm run start"
   },
