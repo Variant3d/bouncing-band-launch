@@ -47,27 +47,85 @@ body
         .arrows
           img(src="./media/2d/UI/arrows.png", alt="arrows")
 
-    //- app
-    #overlay.hidden      
-      .hints
-        img.scan(src="./media/2d/gif/scan.gif", alt="scan")
-        .copy 
-          p scan the floors and surfaces around you
-      .subhint.hidden
-        img.tap(src="./media/2d/gif/tap.gif", alt="tap")
-        p now tap to drop!
-      .gifcontainer        
-      nav.hidden
-        button.but.undo
-          img(src="./media/2d/UI/undo.png", alt="undo")
-        button.but.bomb
-          img(src="./media/2d/UI/bomb.png", alt="bomb")
-      .bottom.hidden
-        button.but.prev   
-          img(src="./media/2d/UI/arrow.png", alt="arrow")
-        .status
-          img.icon(src="./media/2d/icons/pong.png", alt="ico")
-        button.but.next
-          img(src="./media/2d/UI/arrow.png", alt="arrow")
+    //- ...
 
-    script(src="./bounce.js")
+//- app
+#overlay.hidden      
+  .hints
+    img.scan(src="./media/2d/gif/scan.gif", alt="scan")
+    .copy 
+      p scan the floors and surfaces around you
+  .subhint.hidden
+    img.tap(src="./media/2d/gif/tap.gif", alt="tap")
+    p now tap to drop!
+  .gifcontainer        
+  nav.hidden
+    button.but.undo
+      img(src="./media/2d/UI/undo.png", alt="undo")
+    button.but.bomb
+      img(src="./media/2d/UI/bomb.png", alt="bomb")
+  .bottom.hidden
+    button.but.prev   
+      img(src="./media/2d/UI/arrow.png", alt="arrow")
+    .status
+      img.icon(src="./media/2d/icons/pong.png", alt="ico")
+    button.but.next
+      img(src="./media/2d/UI/arrow.png", alt="arrow")
+
+//- Add Three.js code here
+script.
+  // Initialize Three.js
+  var scene = new THREE.Scene();
+  var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+  var renderer = new THREE.WebGLRenderer();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  document.body.appendChild(renderer.domElement);
+
+  // Add Geolocation Support - Demo Data
+  var userLatitude = 40.7128; // New York City Latitude
+  var userLongitude = -74.0060; // New York City Longitude
+
+  // Define Destination Coordinates - Demo Data
+  var destinationLatitude = 34.0522; // Los Angeles Latitude
+  var destinationLongitude = -118.2437; // Los Angeles Longitude
+
+  // Calculate Direction and Distance - Placeholder
+  function calculateDirection(userLat, userLon, destLat, destLon) {
+      return Math.atan2(destLon - userLon, destLat - userLat);
+  }
+
+  function calculateDistance(userLat, userLon, destLat, destLon) {
+      return Math.sqrt(Math.pow(destLat - userLat, 2) + Math.pow(destLon - userLon, 2));
+  }
+
+  // Convert Coordinates to 3D Position - Placeholder
+  function convertTo3DPosition(latitude, longitude) {
+      // For demo purposes, convert latitude and longitude to arbitrary x, y, z coordinates
+      var scaleFactor = 10000;
+      return { x: longitude * scaleFactor, y: 0, z: -latitude * scaleFactor };
+  }
+
+  // Create User Avatar
+  var userAvatarGeometry = new THREE.BoxGeometry(1, 1, 1);
+  var userAvatarMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+  var userAvatar = new THREE.Mesh(userAvatarGeometry, userAvatarMaterial);
+  scene.add(userAvatar);
+
+  // Create Directional Indicator
+  var directionalIndicatorGeometry = new THREE.ConeGeometry(0.5, 2, 8);
+  var directionalIndicatorMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+  var directionalIndicator = new THREE.Mesh(directionalIndicatorGeometry, directionalIndicatorMaterial);
+  scene.add(directionalIndicator);
+
+  // Update User's Position and Direction
+  var direction = calculateDirection(userLatitude, userLongitude, destinationLatitude, destinationLongitude);
+  var userPosition = convertTo3DPosition(userLatitude, userLongitude);
+  userAvatar.position.set(userPosition.x, userPosition.y, userPosition.z);
+  directionalIndicator.rotation.y = direction;
+
+  // Function to animate the scene
+  function animate() {
+      requestAnimationFrame(animate);
+      renderer.render(scene, camera);
+  }
+  animate();
