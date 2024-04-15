@@ -7,7 +7,7 @@ const gltfLoader = new GLTFLoader();
 let model;
 
 // Update the file path to point to your GLB model
-const glbFilePath = "./media/3d/direction_arrows.glb";
+const glbFilePath = "./media/3d/duck.glb";
 
 gltfLoader.load(glbFilePath, (gltf) => {
   model = gltf.scene;
