@@ -56,7 +56,7 @@ function animate() {
   renderer.setAnimationLoop(render);
 }
 
-function render(timestamp, frame) {
+function render() {
   renderer.render(scene, camera);
 }
 
