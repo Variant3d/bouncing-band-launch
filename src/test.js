@@ -23,7 +23,6 @@
 import * as THREE from "three";
 import { ARButton } from "./lib/ARButton.js";
 import { Howl, Howler } from "howler";
-import { Bouncer } from "./lib/Bouncer.js";
 import { preload, loadMesh, glbSrc } from "./lib/spawner.js";
 
 // media assets
@@ -71,8 +70,7 @@ let hitTestSourceRequested = false;
 let isUI = false;
 let isTracked = false;
 let isStarted = false;
-let floater = null;
-let bouncers = [];
+let model;
 
 // set gravity
 const gravity = new THREE.Vector3(0, -0.01, 0);
@@ -118,7 +116,6 @@ const init = () => {
   //
 
   const onSelect = () => {
-    // UI Acrobatics
     if (isUI) {
       isUI = false;
     } else {
@@ -128,11 +125,6 @@ const init = () => {
         ).y;
         const pos = new THREE.Vector3().setFromMatrixPosition(reticle.matrix);
         const thing = icon.split("/")[3].split(".")[0];
-
-        let bouncer = new Bouncer(pos, height, thing);
-
-        scene.add(bouncer.mesh);
-        bouncers.push(bouncer);
 
         const nav = document.querySelector("nav");
         if (nav.classList.contains("hidden")) nav.classList.remove("hidden");
@@ -170,16 +162,12 @@ const init = () => {
   // splash screen
   loadMesh(glbSrc.duck).then((mesh) => {
     scene.background = new THREE.Color(0x000000);
-    floater = mesh.clone();
-    floater.scale.copy(new THREE.Vector3(0.03, 0.03, 0.03));
-    floater.rotation.set(0, 0, 0);
-    //Y↑ X→ Z↙
-    floater.position.set(0, -0.7, -0.7);
-    camera.lookAt(floater.position);
-    scene.add(floater);
-    camera.position.set(0, -0.38, 0);
+    model = mesh.clone();
+    model.scale.copy(new THREE.Vector3(0.03, 0.03, 0.03));
+    model.position.set(0, 0, -0.5); // Adjust position as needed
+    scene.add(model);
 
-    //hide loader
+    // Update the UI elements to display the new model
     document.querySelector(".cool-stuff").classList.remove("hidden");
     document.querySelector(".loader").classList.add("hidden");
     document.querySelector("#ARButton").style.visibility = "visible";
@@ -189,7 +177,6 @@ const init = () => {
     console.log("models loaded!");
   });
 };
-// end of init
 
 function onWindowResize() {
   camera.aspect = window.innerWidth / window.innerHeight;
@@ -213,10 +200,6 @@ const bomb = () => {
 
   // it's rude to be late
   window.setTimeout(() => {
-    bouncers.map((ball) => {
-      scene.remove(ball.mesh);
-    });
-    bouncers = [];
     renderer.renderLists.dispose();
     document.querySelector("nav").classList.add("hidden");
     window.navigator.vibrate(1000);
@@ -229,21 +212,7 @@ const bomb = () => {
 };
 
 const undo = () => {
-  if (bouncers.length > 0) {
-    window.setTimeout(() => {
-      window.navigator.vibrate(40);
-    }, 200);
-    let ball = bouncers[bouncers.length - 1];
-    scene.remove(ball.mesh);
-    bouncers.pop();
-    isUI = true;
-    sounds.undo.play();
-  }
-
-  // hide ui
-  if (bouncers.length === 0) {
-    document.querySelector("nav").classList.add("hidden");
-  }
+  // No bouncing functionality to undo
 };
 
 const nextIcon = () => {
@@ -299,17 +268,17 @@ function animate() {
 
 function render(timestamp, frame) {
   if (!isStarted) {
-    if (floater !== null)
-      floater.rotation.set(
+    if (model !== null)
+      model.rotation.set(
         deviceRotation.x * 0.02 - 45,
-        (floater.rotation.y += 0.015),
+        (model.rotation.y += 0.015),
         0
       );
   } else {
-    if (floater !== null) {
-      scene.remove(floater);
+    if (model !== null) {
+      scene.remove(model);
       camera.position.set(0, 0, 0);
-      floater = null;
+      model = null;
       window.removeEventListener("deviceorientation", handleOrientation, true);
     }
     if (frame) {
@@ -365,12 +334,6 @@ function render(timestamp, frame) {
           pointer.visible = false;
         }
       }
-    }
-
-    // update bouncers
-    for (let i = 0; i < bouncers.length; i++) {
-      bouncers[i].applyForce(gravity);
-      bouncers[i].update();
     }
   }
 
