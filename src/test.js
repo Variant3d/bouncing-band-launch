@@ -2,45 +2,42 @@ import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { ARButton } from "./lib/ARButton.js";
 
-// Load GLB model and attach it to the camera
-const gltfLoader = new GLTFLoader();
+let camera, scene, renderer;
 let model;
 
-// Update the file path to point to your GLB model
-const glbFilePath = "./media/3d/duck.glb";
-
-gltfLoader.load(glbFilePath, (gltf) => {
-  model = gltf.scene;
-  model.position.set(0, 0, -0.5); // Adjust the position as needed
-  camera.add(model);
-});
-
-// Scene setup
-let container, scene, camera, renderer;
-
 const init = () => {
-  container = document.createElement("div");
-  document.body.appendChild(container);
-
+  // Initialize Three.js components
   scene = new THREE.Scene();
-
-  const light = new THREE.HemisphereLight(0xffffff, 0xbbbbff, 1.5);
-  light.position.set(0.5, 1, 1);
-  scene.add(light);
-
   camera = new THREE.PerspectiveCamera(
     70,
     window.innerWidth / window.innerHeight,
     0.01,
     20
   );
-
   renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
   renderer.setPixelRatio(window.devicePixelRatio);
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.xr.enabled = true;
-  container.appendChild(renderer.domElement);
+  document.body.appendChild(renderer.domElement);
 
+  // Load GLB model and attach it to the camera
+  const gltfLoader = new GLTFLoader();
+  const glbFilePath = "./media/3d/direction_arrows.glb";
+  gltfLoader.load(glbFilePath, (gltf) => {
+    model = gltf.scene;
+    model.position.set(0, 0, -0.5); // Adjust position as needed
+    camera.add(model);
+  });
+
+  // Add camera to the scene
+  scene.add(camera);
+
+  // Add lights
+  const light = new THREE.HemisphereLight(0xffffff, 0xbbbbff, 1.5);
+  light.position.set(0.5, 1, 1);
+  scene.add(light);
+
+  // Add AR button
   document.body.appendChild(
     ARButton.createButton(renderer, {
       requiredFeatures: ["hit-test"],
@@ -49,16 +46,37 @@ const init = () => {
     })
   );
 
+  // Add resize listener
+  window.addEventListener("resize", onWindowResize, false);
+
+  // Start rendering
   animate();
 };
 
+// Window resize handler
+function onWindowResize() {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+}
+
+// Animation loop
 function animate() {
   renderer.setAnimationLoop(render);
 }
 
+// Render function
 function render() {
+  // If model exists, update its position to be stuck to the camera
+  if (model) {
+    model.position.copy(camera.position);
+    model.position.y -= 0.5; // Adjust as needed to keep it in the middle of the screen
+    // Add slight up and down motion
+    model.position.y += Math.sin(Date.now() * 0.001) * 0.05;
+  }
+
   renderer.render(scene, camera);
 }
 
-// Run initialization
+// Initialize the app
 init();
